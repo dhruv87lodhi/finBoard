@@ -5,12 +5,13 @@ import { demoData } from "../data/demoData";
 import { format } from "date-fns";
 
 export default function CSVParser() {
- issue-13-csv-feedback
-  const { transactions, setTransactions } = useContext(DataContext);
+  const {
+    transactions,
+    setTransactions,
+    currency,
+    updateCurrency,
+  } = useContext(DataContext);
 
-
-  const { transactions, setTransactions, currency, updateCurrency } = useContext(DataContext);
- main
   const [data, setData] = useState([]);
   const [showManualEntry, setShowManualEntry] = useState(false);
 
@@ -68,7 +69,10 @@ export default function CSVParser() {
   const handleManualSubmit = (e) => {
     e.preventDefault();
 
-    if (!manualTransaction.Description || !manualTransaction.Amount) {
+    if (
+      !manualTransaction.Description ||
+      !manualTransaction.Amount
+    ) {
       alert("Please fill in all fields");
       return;
     }
@@ -135,7 +139,9 @@ export default function CSVParser() {
 
       localStorage.removeItem("transactions");
 
-      setSuccessMessage("All transactions deleted successfully!");
+      setSuccessMessage(
+        "All transactions deleted successfully!"
+      );
 
       setTimeout(() => {
         setSuccessMessage("");
@@ -204,7 +210,9 @@ export default function CSVParser() {
                   JSON.stringify(demoData)
                 );
 
-                setSuccessMessage("Demo data loaded successfully!");
+                setSuccessMessage(
+                  "Demo data loaded successfully!"
+                );
 
                 setTimeout(() => {
                   setSuccessMessage("");
@@ -225,10 +233,14 @@ export default function CSVParser() {
           </h2>
 
           <button
-            onClick={() => setShowManualEntry(!showManualEntry)}
+            onClick={() =>
+              setShowManualEntry(!showManualEntry)
+            }
             className="text-sm text-gray-400 hover:text-[#FF6B00] uppercase tracking-wider font-bold transition-colors"
           >
-            {showManualEntry ? "Hide Form" : "Add Transaction"}
+            {showManualEntry
+              ? "Hide Form"
+              : "Add Transaction"}
           </button>
         </div>
 
@@ -296,7 +308,10 @@ export default function CSVParser() {
             </div>
 
             <div className="flex gap-4">
-              <button type="submit" className="retro-btn">
+              <button
+                type="submit"
+                className="retro-btn"
+              >
                 Add Transaction
               </button>
 
@@ -311,55 +326,64 @@ export default function CSVParser() {
           </form>
         )}
       </div>
-<<<<<<< HEAD
 
-      {/* RAW DATA */}
-      {data && data.length > 0 && (
-        <div className="retro-card p-8">
-          <h2 className="text-[#FF6B00] text-lg font-black uppercase tracking-widest mb-6">
-            Raw Parsed Data
-          </h2>
+      {/* CURRENCY SETTINGS */}
+      <div className="retro-card p-8">
+        <h2 className="text-[#FF6B00] text-lg font-black uppercase tracking-widest mb-6">
+          Currency Settings
+        </h2>
 
-=======
- issue-13-csv-feedback
+        <div className="max-w-sm">
+          <label className="block text-xs text-gray-400 uppercase tracking-wider font-bold mb-2">
+            Select Currency
+          </label>
 
+          <select
+            value={currency.code}
+            onChange={(e) => {
+              const selected = CURRENCIES.find(
+                (c) => c.code === e.target.value
+              );
 
-      {/* Currency Settings Section */}
-<div className="retro-card p-8">
-  <h2 className="text-[#FF6B00] text-lg font-black uppercase tracking-widest mb-6">Currency Settings</h2>
-  <div className="max-w-sm">
-    <label className="block text-xs text-gray-400 uppercase tracking-wider font-bold mb-2">
-      Select Currency
-    </label>
-    <select
-      value={currency.code}
-      onChange={(e) => {
-        const selected = CURRENCIES.find(c => c.code === e.target.value);
-        if (selected) updateCurrency(selected);
-      }}
-      className="retro-input p-3 w-full"
-    >
-      {CURRENCIES.map((c) => (
-        <option key={c.code} value={c.code}>
-          {c.symbol} — {c.name} ({c.code})
-        </option>
-      ))}
-    </select>
-    <p className="text-xs text-gray-400 mt-3">
-      Currently using: <span className="text-[#FF6B00] font-bold">{currency.symbol} {currency.name}</span>
-    </p>
-  </div>
-</div> 
-      {/* Data Management Section */}
+              if (selected) {
+                updateCurrency(selected);
+              }
+            }}
+            className="retro-input p-3 w-full"
+          >
+            {CURRENCIES.map((c) => (
+              <option key={c.code} value={c.code}>
+                {c.symbol} — {c.name} ({c.code})
+              </option>
+            ))}
+          </select>
+
+          <p className="text-xs text-gray-400 mt-3">
+            Currently using:
+            <span className="text-[#FF6B00] font-bold ml-1">
+              {currency.symbol} {currency.name}
+            </span>
+          </p>
+        </div>
+      </div>
+
+      {/* DATA MANAGEMENT */}
       {transactions && transactions.length > 0 && (
         <div className="retro-card p-8">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h2 className="text-[#FF6B00] text-lg font-black uppercase tracking-widest">Data Management</h2>
+              <h2 className="text-[#FF6B00] text-lg font-black uppercase tracking-widest">
+                Data Management
+              </h2>
+
               <p className="text-gray-400 text-sm mt-2">
-                Total Transactions: <span className="text-white font-bold">{transactions.length}</span>
+                Total Transactions:
+                <span className="text-white font-bold ml-1">
+                  {transactions.length}
+                </span>
               </p>
             </div>
+
             <button
               onClick={clearAllData}
               className="px-4 py-2 bg-[#FF6B6B] text-white font-bold uppercase tracking-wider text-sm hover:bg-[#FF5252] transition-colors"
@@ -370,10 +394,13 @@ export default function CSVParser() {
         </div>
       )}
 
+      {/* RAW DATA */}
       {data && data.length > 0 && (
         <div className="retro-card p-8">
-          <h2 className="text-[#FF6B00] text-lg font-black uppercase tracking-widest mb-6">Raw Parsed Data</h2>
->>>>>>> a82aa987f4ad191e8ced841374930e32e22a5fca
+          <h2 className="text-[#FF6B00] text-lg font-black uppercase tracking-widest mb-6">
+            Raw Parsed Data
+          </h2>
+
           <div className="bg-[#0A0A0A] border border-[#1F1F1F] p-4 max-h-96 overflow-y-auto">
             <pre className="text-xs text-gray-400 font-mono">
               {JSON.stringify(data, null, 2)}
@@ -381,10 +408,6 @@ export default function CSVParser() {
           </div>
         </div>
       )}
-<<<<<<< HEAD
-=======
- main
->>>>>>> a82aa987f4ad191e8ced841374930e32e22a5fca
     </div>
   );
 }
